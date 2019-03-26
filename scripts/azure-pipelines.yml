@@ -4,8 +4,6 @@ jobs:
     pool:
       vmImage: vs2017-win2016
     steps:
-      - checkout: self
-        submodules: recursive
       - task: UsePythonVersion@0
         displayName: Switch to Python to 2.7
         inputs:
