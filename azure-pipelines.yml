@@ -1,0 +1,30 @@
+jobs:
+
+  - job: no_python
+    displayName: No Python
+    pool:
+      vmImage: vs2017-win2016
+    steps:
+      - powershell: .\install-openjdk.ps1
+        displayName: Install the OpenJDK
+      - powershell: .\install-tizen.ps1
+        displayName: Install the Tizen SDK
+        env:
+          JAVA_HOME: $(USERPROFILE)/openjdk/jdk-10.0.2
+
+  - job: with_python
+    displayName: With Python
+    pool:
+      vmImage: vs2017-win2016
+    steps:
+      - task: UsePythonVersion@0
+        displayName: Switch to Python to 2.7
+        inputs:
+          versionSpec: '2.7'
+          architecture: 'x64'
+      - powershell: .\install-openjdk.ps1
+        displayName: Install the OpenJDK
+      - powershell: .\install-tizen.ps1
+        displayName: Install the Tizen SDK
+        env:
+          JAVA_HOME: $(USERPROFILE)/openjdk/jdk-10.0.2
