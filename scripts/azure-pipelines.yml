@@ -1,6 +1,19 @@
 jobs:
-  - job: native_tizen_windows
-    displayName: Build Native Tizen (Windows)
+
+  - job: no_python
+    displayName: No Python
+    pool:
+      vmImage: vs2017-win2016
+    steps:
+      - powershell: .\scripts\install-openjdk.ps1
+        displayName: Install the OpenJDK
+      - powershell: .\scripts\install-tizen.ps1
+        displayName: Install the Tizen SDK
+        env:
+          JAVA_HOME: $(USERPROFILE)/openjdk/jdk-10.0.2
+
+  - job: with_python
+    displayName: With Python
     pool:
       vmImage: vs2017-win2016
     steps:
