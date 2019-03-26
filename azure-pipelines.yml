@@ -4,9 +4,9 @@ jobs:
     pool:
       vmImage: vs2017-win2016
     steps:
-      - powershell: .\scripts\install-openjdk.ps1
+      - powershell: .\install-openjdk.ps1
         displayName: Install the OpenJDK
-      - powershell: .\scripts\install-tizen.ps1
+      - powershell: .\install-tizen.ps1
         displayName: Install the Tizen SDK
         env:
           JAVA_HOME: $(USERPROFILE)/openjdk/jdk-10.0.2
