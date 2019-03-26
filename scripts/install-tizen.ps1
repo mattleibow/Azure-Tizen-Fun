@@ -25,19 +25,26 @@ $packages = "MOBILE-4.0,MOBILE-4.0-NativeAppDevelopment"
 if ($env:JAVA_HOME) {
     $javaBin = Join-Path "$env:JAVA_HOME" "bin"
     if(-not $env:PATH.Contains($javaBin)) {
+        $splitPath = $env:PATH.Split([System.IO.Path]::PathSeparator)
+        Write-Host "Removing the following Java locations from PATH:"
+        $theJava = $splitPath | Where-Object { $_ -like "*Java*" }
+        $javaPath = [String]::Join([System.IO.Path]::PathSeparator, $theJava)
+        Write-Host "$javaPath"
         Write-Host "Adding $javaBin to PATH..."
-        $env:PATH = $javaBin + [System.IO.Path]::PathSeparator + $env:PATH
+        $noJava = $splitPath | Where-Object { $_ -notlike "*Java*" };
+        $newPath = @( "$javaBin" ) + $noJava
+        $env:PATH = [String]::Join([System.IO.Path]::PathSeparator, $newPath)
     }
 }
+
+# log the contents of PATH
+Write-Host "Contents of PATH:"
+Write-Host "$env:PATH"
 
 # log the Java version
 Write-Host "Using Java version:"
 & "cmd" /c where java
 & "java" -version
-
-# log the contents of PATH
-Write-Host "Contents of PATH:"
-Write-Host "$env:PATH"
 
 # download
 Write-Host "Downloading SDK to '$install'..."
