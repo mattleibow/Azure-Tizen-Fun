@@ -1,63 +1,63 @@
 jobs:
   - job: native_tizen_windows
-      displayName: Build Native Tizen (Windows)
-      timeoutInMinutes: 120
-      pool:
-        vmImage: vs2017-win2016
-      steps:
-        - checkout: self
-          submodules: recursive
-        - ${{ if endsWith('native_tizen_windows', '_linux') }}:
-          - bash: |
-              sudo apt update
-              sudo apt install -y 
-            displayName: Install any package dependencies
-        # install extra bits for the native builds
-        - ${{ if startsWith('native_tizen_windows', 'native_') }}:
-          # switch to Python 2.7
-          - task: UsePythonVersion@0
-            displayName: Switch to Python to 2.7
-            inputs:
-              versionSpec: '2.7'
-              architecture: 'x64'
-          # install android ndk
-          - ${{ if contains('native_tizen_windows', '_android_') }}:
-            - powershell: .\scripts\install-android-ndk.ps1
-              displayName: Install the Android NDK
-          # install tizen
-        - ${{ if contains('native_tizen_windows', '_tizen_') }}:
-          - ${{ if not(contains('vs2017-win2016', 'win')) }}:
-            - powershell: .\scripts\install-tizen.ps1
-              displayName: Install the Tizen SDK
-          - ${{ if contains('vs2017-win2016', 'win') }}:
-            - powershell: .\scripts\install-openjdk.ps1
-              displayName: Install the OpenJDK
-            - powershell: .\scripts\install-tizen.ps1
-              displayName: Install the Tizen SDK
-              env:
-                JAVA_HOME: $(USERPROFILE)/openjdk/jdk-10.0.2
-        # switch to the correct mono version on mac
-        - ${{ if contains('vs2017-win2016', 'mac') }}:
-          - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
-            displayName: Switch to the latest Xamarin SDK
-          - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
-            displayName: Switch to the latest Xcode
-        # build
-        - ${{ if contains('vs2017-win2016', 'win') }}:
-          - powershell: .\bootstrapper.ps1 -t externals-tizen -v $env:VERBOSITY
-            displayName: Run the bootstrapper for externals-tizen
-            env:
-              ANDROID_NDK_HOME: $(USERPROFILE)/android-ndk
-              TIZEN_STUDIO_HOME: $(USERPROFILE)/tizen-studio
-        - ${{ if not(contains('vs2017-win2016', 'win')) }}:
-          - bash: ./bootstrapper.sh -t externals-tizen -v $VERBOSITY
-            displayName: Run the bootstrapper for externals-tizen
-            env:
-              ANDROID_NDK_HOME: $(HOME)/android-ndk
-              TIZEN_STUDIO_HOME: $(HOME)/tizen-studio
-        # publish artifacts
-        - task: PublishPipelineArtifact@0
-          displayName: Publish the native_tizen_windows artifacts
+    displayName: Build Native Tizen (Windows)
+    timeoutInMinutes: 120
+    pool:
+      vmImage: vs2017-win2016
+    steps:
+      - checkout: self
+        submodules: recursive
+      - ${{ if endsWith('native_tizen_windows', '_linux') }}:
+        - bash: |
+            sudo apt update
+            sudo apt install -y 
+          displayName: Install any package dependencies
+      # install extra bits for the native builds
+      - ${{ if startsWith('native_tizen_windows', 'native_') }}:
+        # switch to Python 2.7
+        - task: UsePythonVersion@0
+          displayName: Switch to Python to 2.7
           inputs:
-            artifactName: native_tizen_windows
-            targetPath: 'output'
+            versionSpec: '2.7'
+            architecture: 'x64'
+        # install android ndk
+        - ${{ if contains('native_tizen_windows', '_android_') }}:
+          - powershell: .\scripts\install-android-ndk.ps1
+            displayName: Install the Android NDK
+        # install tizen
+      - ${{ if contains('native_tizen_windows', '_tizen_') }}:
+        - ${{ if not(contains('vs2017-win2016', 'win')) }}:
+          - powershell: .\scripts\install-tizen.ps1
+            displayName: Install the Tizen SDK
+        - ${{ if contains('vs2017-win2016', 'win') }}:
+          - powershell: .\scripts\install-openjdk.ps1
+            displayName: Install the OpenJDK
+          - powershell: .\scripts\install-tizen.ps1
+            displayName: Install the Tizen SDK
+            env:
+              JAVA_HOME: $(USERPROFILE)/openjdk/jdk-10.0.2
+      # switch to the correct mono version on mac
+      - ${{ if contains('vs2017-win2016', 'mac') }}:
+        - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
+          displayName: Switch to the latest Xamarin SDK
+        - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
+          displayName: Switch to the latest Xcode
+      # build
+      - ${{ if contains('vs2017-win2016', 'win') }}:
+        - powershell: .\bootstrapper.ps1 -t externals-tizen -v $env:VERBOSITY
+          displayName: Run the bootstrapper for externals-tizen
+          env:
+            ANDROID_NDK_HOME: $(USERPROFILE)/android-ndk
+            TIZEN_STUDIO_HOME: $(USERPROFILE)/tizen-studio
+      - ${{ if not(contains('vs2017-win2016', 'win')) }}:
+        - bash: ./bootstrapper.sh -t externals-tizen -v $VERBOSITY
+          displayName: Run the bootstrapper for externals-tizen
+          env:
+            ANDROID_NDK_HOME: $(HOME)/android-ndk
+            TIZEN_STUDIO_HOME: $(HOME)/tizen-studio
+      # publish artifacts
+      - task: PublishPipelineArtifact@0
+        displayName: Publish the native_tizen_windows artifacts
+        inputs:
+          artifactName: native_tizen_windows
+          targetPath: 'output'
