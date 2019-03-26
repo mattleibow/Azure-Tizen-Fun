@@ -11,13 +11,9 @@ jobs:
         inputs:
           versionSpec: '2.7'
           architecture: 'x64'
-      - ${{ if not(contains('vs2017-win2016', 'win')) }}:
-        - powershell: .\scripts\install-tizen.ps1
-          displayName: Install the Tizen SDK
-      - ${{ if contains('vs2017-win2016', 'win') }}:
-        - powershell: .\scripts\install-openjdk.ps1
-          displayName: Install the OpenJDK
-        - powershell: .\scripts\install-tizen.ps1
-          displayName: Install the Tizen SDK
-          env:
-            JAVA_HOME: $(USERPROFILE)/openjdk/jdk-10.0.2
+      - powershell: .\scripts\install-openjdk.ps1
+        displayName: Install the OpenJDK
+      - powershell: .\scripts\install-tizen.ps1
+        displayName: Install the Tizen SDK
+        env:
+          JAVA_HOME: $(USERPROFILE)/openjdk/jdk-10.0.2
