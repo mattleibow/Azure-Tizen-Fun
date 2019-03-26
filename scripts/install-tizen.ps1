@@ -32,7 +32,12 @@ if ($env:JAVA_HOME) {
 
 # log the Java version
 Write-Host "Using Java version:"
+& "cmd" /c where java
 & "java" -version
+
+# log the contents of PATH
+Write-Host "Contents of PATH:"
+Write-Host "$env:PATH"
 
 # download
 Write-Host "Downloading SDK to '$install'..."
