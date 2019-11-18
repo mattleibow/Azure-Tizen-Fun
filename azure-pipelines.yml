@@ -3,7 +3,7 @@ strategy:
     macos:
       IMAGE_NAME: Hosted macOS
     windows:
-      IMAGE_NAME: Hosted Windows 2019 with VS2019
+      IMAGE_NAME: Hosted VS2017
     linux:
       IMAGE_NAME: Hosted Ubuntu 1604
       
