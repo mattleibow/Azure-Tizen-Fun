@@ -1,9 +1,13 @@
 strategy:
   matrix:
     macos:
+      IMAGE_NAME: Hosted macOS High Sierra
+    macos2:
       IMAGE_NAME: Hosted macOS
-    windows:
+    windows2017:
       IMAGE_NAME: Hosted VS2017
+    windows2019:
+      IMAGE_NAME: Hosted Windows 2019 with VS2019
     linux:
       IMAGE_NAME: Hosted Ubuntu 1604
       
