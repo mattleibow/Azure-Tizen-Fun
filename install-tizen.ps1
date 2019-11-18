@@ -1,8 +1,9 @@
 Param(
-    [string] $version = "3.2"
+    [string] $Version = "3.3",
+    [string] $InstallDestination = $null
 )
 
-$errorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 
 if ($IsMacOS) {
     $platform = "macos-64"
@@ -15,36 +16,17 @@ if ($IsMacOS) {
     $ext = "exe"
 }
 
+$url = "http://download.tizen.org/sdk/Installer/tizen-studio_${Version}/web-cli_Tizen_Studio_${Version}_${platform}.${ext}"
+
 $ts = Join-Path "$HOME" "tizen-studio"
+if ($InstallDestination) {
+    $ts = $InstallDestination
+}
+Write-Host "Install destination is '$ts'..."
+
 $tsTemp = Join-Path "$HOME" "tizen-temp"
-$url = "http://download.tizen.org/sdk/Installer/tizen-studio_${version}/web-cli_Tizen_Studio_${version}_${platform}.${ext}"
 $install = Join-Path "$tsTemp" "tizen-install.$ext"
 $packages = "MOBILE-4.0,MOBILE-4.0-NativeAppDevelopment"
-
-# make sure that JAVA_HOME/bin is in the PATH
-if ($env:JAVA_HOME) {
-    $javaBin = Join-Path "$env:JAVA_HOME" "bin"
-    if(-not $env:PATH.Contains($javaBin)) {
-        $splitPath = $env:PATH.Split([System.IO.Path]::PathSeparator)
-        Write-Host "Removing the following Java locations from PATH:"
-        $theJava = $splitPath | Where-Object { $_ -like "*Java*" }
-        $javaPath = [String]::Join([System.IO.Path]::PathSeparator, $theJava)
-        Write-Host "$javaPath"
-        Write-Host "Adding $javaBin to PATH..."
-        $noJava = $splitPath | Where-Object { $_ -notlike "*Java*" };
-        $newPath = @( "$javaBin" ) + $noJava
-        $env:PATH = [String]::Join([System.IO.Path]::PathSeparator, $newPath)
-    }
-}
-
-# log the contents of PATH
-Write-Host "Contents of PATH:"
-Write-Host "$env:PATH"
-
-# log the Java version
-Write-Host "Using Java version:"
-& "cmd" /c where java
-& "java" -version
 
 # download
 Write-Host "Downloading SDK to '$install'..."
@@ -67,5 +49,8 @@ if ($IsMacOS -or $IsLinux) {
 } else {
     & "$packMan" install --no-java-check --accept-license "$packages"
 }
+
+# make sure that Tizen Studio is in TIZEN_STUDIO_HOME
+Write-Host "##vso[task.setvariable variable=TIZEN_STUDIO_HOME;]$ts";
 
 exit $LASTEXITCODE
