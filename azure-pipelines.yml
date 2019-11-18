@@ -1,11 +1,12 @@
-matrix:
-  macos:
-    IMAGE_NAME: Hosted macOS
-  windows:
-    IMAGE_NAME: Hosted Windows 2019 with VS2019
-  linux:
-    IMAGE_NAME: Hosted Ubuntu 1604
-
+strategy:
+  matrix:
+    macos:
+      IMAGE_NAME: Hosted macOS
+    windows:
+      IMAGE_NAME: Hosted Windows 2019 with VS2019
+    linux:
+      IMAGE_NAME: Hosted Ubuntu 1604
+      
 pool:
   name: $(IMAGE_NAME)
 
