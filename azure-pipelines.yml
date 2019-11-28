@@ -22,5 +22,5 @@ steps:
   - task: PublishBuildArtifacts@1
     condition: always()
     inputs:
-      pathToPublish: '$(Agent.HomeDirectory)/.package-manager/install-log/package-manager'
+      pathToPublish: '$(Agent.HomeDirectory)/../../.package-manager/install-log/package-manager'
       artifactName: '$(Agent.JobName)-package-manager-install-log'
