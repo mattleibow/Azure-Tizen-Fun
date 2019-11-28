@@ -10,7 +10,7 @@ strategy:
       IMAGE_NAME: Hosted Windows 2019 with VS2019
     linux:
       IMAGE_NAME: Hosted Ubuntu 1604
-      
+
 pool:
   name: $(IMAGE_NAME)
 
@@ -19,3 +19,9 @@ steps:
     displayName: Install the OpenJDK
   - powershell: .\install-tizen.ps1
     displayName: Install the Tizen SDK
+  - task: PublishBuildArtifacts@1
+    condition: always()
+    inputs:
+      pathToPublish: '$(Agent.HomeDirectory)/.package-manager/install-log/package-manager'
+      artifactName: '$(Agent.JobName)-install-log'
+      publishLocation: 'Container'
