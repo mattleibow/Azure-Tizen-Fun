@@ -23,5 +23,4 @@ steps:
     condition: always()
     inputs:
       pathToPublish: '$(Agent.HomeDirectory)/.package-manager/install-log/package-manager'
-      artifactName: '$(Agent.JobName)-install-log'
-      publishLocation: 'Container'
+      artifactName: '$(Agent.JobName)-package-manager-install-log'
