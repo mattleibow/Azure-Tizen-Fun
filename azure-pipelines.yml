@@ -23,9 +23,9 @@ steps:
     condition: and(always(), startsWith(variables['Agent.JobName'], 'windows'))
     inputs:
       pathToPublish: '$(USERPROFILE)/.package-manager/install-log/package-manager'
-      artifactName: '$(Agent.JobName)-package-manager-install-log'
+      artifactName: '$(System.JobName)-package-manager-install-log'
   - task: PublishBuildArtifacts@1
     condition: and(always(), not(startsWith(variables['Agent.JobName'], 'windows')))
     inputs:
       pathToPublish: '$(HOME)/.package-manager/install-log/package-manager'
-      artifactName: '$(Agent.JobName)-package-manager-install-log'
+      artifactName: '$(System.JobName)-package-manager-install-log'
