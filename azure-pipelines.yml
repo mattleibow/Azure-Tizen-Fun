@@ -20,12 +20,12 @@ steps:
   - powershell: .\install-tizen.ps1
     displayName: Install the Tizen SDK
   - task: PublishBuildArtifacts@1
-    condition: and(always(), startsWith(variables['Agent.JobName'], 'windows'))
+    condition: and(always(), startsWith(variables['System.JobName'], 'windows'))
     inputs:
       pathToPublish: '$(USERPROFILE)/.package-manager/install-log/package-manager'
       artifactName: '$(System.JobName)-package-manager-install-log'
   - task: PublishBuildArtifacts@1
-    condition: and(always(), not(startsWith(variables['Agent.JobName'], 'windows')))
+    condition: and(always(), not(startsWith(variables['System.JobName'], 'windows')))
     inputs:
       pathToPublish: '$(HOME)/.package-manager/install-log/package-manager'
       artifactName: '$(System.JobName)-package-manager-install-log'
